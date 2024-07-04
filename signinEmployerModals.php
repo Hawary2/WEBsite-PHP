@@ -4,23 +4,131 @@
 <meta charset="UTF-8">
 <title>Modal SignIn/Registration</title>
 <style type="text/css">
-  .label-text {
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #000;
+    color: #6f42c1;
+  }
+  .modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .modal-header, .modal-footer {
+    border: none;
+    background-color: #000;
+    color: #6f42c1;
+    text-align: center;
+    padding: 15px;
+  }
+  .modal-header h4, .modal-footer span {
+    margin: 0;
+  }
+  .modal-body {
+    padding: 20px;
+    background-color: #000;
+    color: #6f42c1;
+  }
+  .modal-body h3 {
+    color: #6f42c1;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  .modal-body form {
+    margin: 0;
+  }
+  .modal-body form .fieldset {
+    margin-bottom: 15px;
+  }
+  .modal-body form .label-text {
+    display: block;
+    margin-bottom: 5px;
+    color: #6f42c1;
+  }
+  .modal-body form input[type="text"], 
+  .modal-body form input[type="email"], 
+  .modal-body form input[type="password"], 
+  .modal-body form input[type="tel"], 
+  .modal-body form input[type="date"], 
+  .modal-body form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #6f42c1;
+    border-radius: 5px;
+    background-color: #000;
+    color: #6f42c1;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .modal-body form input[type="submit"] {
+    background-color: #6f42c1;
     color: #fff;
-    font-size: 15px;
-    letter-spacing: 1px;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .modal-body form input[type="submit"]:hover {
+    background-color: #5a32a1;
+  }
+  .nav-tabs {
+    margin-bottom: 15px;
+  }
+  .nav-tabs li a {
+    color: #6f42c1;
+    background-color: #ddd;
+    border-radius: 5px 5px 0 0;
+    padding: 10px 15px;
+  }
+  .nav-tabs li.active a {
+    background-color: #000;
+    border-bottom: none;
+    color: #6f42c1;
+  }
+  .nav-tabs li a:hover {
+    background-color: #ccc;
+  }
+  .tab-content {
+    border: 1px solid #6f42c1;
+    border-radius: 0 0 5px 5px;
+    padding: 15px;
+    background-color: #000;
+    color: #6f42c1;
+  }
+  .cd-form-bottom-message {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .btn-default {
+    background-color: #6f42c1;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .btn-default:hover {
+    background-color: #5a32a1;
+  }
+  .hide-password {
+    float: right;
+    margin-top: -30px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #6f42c1;
   }
 </style>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <link rel="stylesheet" href="path/to/your/css/bootstrap.min.css">
-<script src="path/to/your/js/jquery.min.js"></script>
-<script src="path/to/your/js/bootstrap.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </head>
 <body>
 
 <!-- SignIn Modal -->
 <div class="modal fade" id="myEmployerModal" tabindex="-1" role="dialog" aria-labelledby="myEmployerModalLabel" style="background-image:url('img/siginBack.jpg'); background-size: cover; background-repeat: no-repeat;">
   <div class="modal-dialog" role="document">
-    <div class="modal-content" style="background-image: url(img/bgbg.png); box-shadow: 10px 10px 20px #1e1e1e;">
+    <div class="modal-content">
       <div class="modal-header">
         <button id="empSignInCloseBtn" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myEmployerModalLabel">Sign In</h4>
@@ -28,12 +136,12 @@
       <div class="modal-body">
         <form class="cd-form" method="post" action="your_login_endpoint.php">
           <p class="fieldset">
-            <label class="image-replace cd-email" for="email">E-mail</label>
+            <label class="label-text" for="email">E-mail</label>
             <input class="full-width has-padding has-border" id="email" name="email" type="email" placeholder="E-mail" required>
             <span class="cd-error-message">Error message here!</span>
           </p>
           <p class="fieldset">
-            <label class="image-replace cd-password" for="password">Password</label>
+            <label class="label-text" for="password">Password</label>
             <input class="full-width has-padding has-border" id="password" name="password" type="password" placeholder="Password" required>
             <a href="#0" class="hide-password">Show</a>
             <div id="loginresult" style="display:none;">Error message here!</div>
@@ -43,11 +151,13 @@
           </p>
         </form>
         <p class="cd-form-bottom-message">
-          <button id="regNowBtn" class="btn btn-default" data-toggle="modal" data-target="#empsignup" style="color: brown;">Register Now</button>
+          <button id="regNowBtn" class="btn btn-default" data-toggle="modal" data-target="#empsignup">Register Now</button>
         </p>
         <button id="regEmpModalBtn" style="display:none;" data-toggle="modal" data-target="#empsignup"></button>
       </div>
-      <div class="modal-footer"></div>
+      <div class="modal-footer">
+        <span>Need help? Contact support.</span>
+      </div>
     </div>
   </div>
 </div>
@@ -55,7 +165,7 @@
 <!-- SignUp Modal -->
 <div class="modal fade" id="empsignup" tabindex="-1" role="dialog" aria-labelledby="myEmployerModalLabel">
   <div class="modal-dialog" role="document">
-    <div class="modal-content" style="background-image: url(img/bgbg.png); box-shadow: 10px 10px 20px #1e1e1e;">
+    <div class="modal-content">
       <div class="modal-header">
         <button id="signUpCloseBtn" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myEmployerModalLabel">New Account</h4>
@@ -95,7 +205,7 @@
                 <input class="full-width has-padding has-border" id="logo" name="logo" type="file">
               </p>
               <p class="form-group">
-                <button id="regsubmit" class="full-width has-padding btn-success" type="submit" style="padding:10px; box-shadow: 0px 0px 20px #156785;">Create Account</button>
+                <button id="regsubmit" class="full-width has-padding btn-success" type="submit">Create Account</button>
               </p>
             </form>
           </div>
@@ -117,7 +227,7 @@
               </p>
               <p class="fieldset">
                 <label class="label-text" for="dob">Date of Birth</label>
-                <input class="full-width has-padding has-border" id="dob" name="dob" type="date" placeholder="Date of Birth" required>
+                <input class="full-width has-padding has-border" id="dob" name="dob" type="date" required>
               </p>
               <p class="fieldset">
                 <label class="label-text" for="skills">Skills</label>
@@ -128,13 +238,15 @@
                 <input class="full-width has-padding has-border" id="resume" name="resume" type="file" required>
               </p>
               <p class="form-group">
-                <button id="regsubmit" class="full-width has-padding btn-success" type="submit" style="padding:10px; box-shadow: 0px 0px 20px #156785;">Create Account</button>
+                <button id="regsubmit" class="full-width has-padding btn-success" type="submit">Create Account</button>
               </p>
             </form>
           </div>
         </div>
       </div>
-      <div class="modal-footer"></div>
+      <div class="modal-footer">
+        <span>Welcome to our community!</span>
+      </div>
     </div>
   </div>
 </div>
@@ -150,7 +262,7 @@
       <div class="modal-body">
         <span>Login to continue</span>
         <div class="center-block">
-          <button id="cancelEmpregModal" type="button" class="btn btn-default" data-dismiss="modal" style="width: 150px;">Done</button>
+          <button id="cancelEmpregModal" type="button" class="btn btn-default" data-dismiss="modal">Done</button>
         </div>
       </div>
     </div>

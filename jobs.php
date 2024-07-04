@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
   <link href="css/Animate.css" rel="stylesheet" type="text/css">
   <link href="css/animate.min.css" rel="stylesheet" type="text/css">
@@ -145,6 +145,8 @@
             <!----------------------SUM OF POSTS & ACTIVE USERS USING VIEW TABLES--------------------------->
 
             <!-- sum of posts -->
+			
+			
             <?php
             include 'connect.php';
             $sql = "select * from `totalposts`";
@@ -204,25 +206,70 @@
               ?>
 
 
-                  <div class="col-md-4 crd" style="margin: 20px; background-color:#257059; padding: 20px;">
-
-                    <h3 style="color: #e9c46a"> <b> <?php echo $jobtitle; ?> <b> </h3>
-                    <!-- ------------------------------------------------------------------ -->
-                    <h5 style="color:#99D98C">By <?php echo $ename; ?> </h5> <br>
-                    <!-- ------------------------------------------------------------------ -->
-                    <h5> <b style="color:#F8D4A7">Job Description:</b> <br> </h5>
-                    <h5><?php echo $desc; ?></h5>
-                    <!-- ------------------------------------------------------------------ -->
-                    <h5><b style="color:#F8D4A7">Experience Required:</b>
-                      <?php echo $minexp; ?> years </h5>
-                    <!-- ------------------------------------------------------------------ -->
-                    <h5><b style="color:#F8D4A7">Salary:</b>
-                      <?php echo $salary; ?> </h5> <br>
-                    <!-- ------------------------------------------------------------------ -->
-                    <a href="applyJob.php?id=<?php echo $pid; ?>" class="pull-right" style="font-family: 'Sora', sans-serif; color:#e9c46a;">
-                      <h3><strong>Apply</strong></h3>
-                    </a>
-                  </div>
+                  <div class="col-md-9"  >
+        <div style=" margin-top: 30px;">
+         
+            </form>
+        </div>
+                            
+        <div class="container row">
+          <?php  
+		  $name=$category=$minexp=$salary=$desc=$role=$eType=$status=$msg="";
+          include 'connect.php';
+          $sql = "select *,(select name from employer where id=post.eid)as ename from post where status = 'open' order by date DESC";  
+            if(isset($_GET['q'])){
+              $sql = "select *,(select name from employer where id=post.eid)as ename from post where name LIKE '%".$_GET['q']."%' and status = 'open' order by date DESC";
+            }      
+          if(isset($_GET['category'])){
+            $sql = "select *,(select name from employer where id=post.eid)as ename from post where category='".$_GET['category']."' and status = 'open' order by date DESC";
+          }
+          $result = $conn->query($sql);
+          if($result->num_rows>0){
+          while(  $row=$result->fetch_assoc()){
+                $pid= $row['id'];
+                $jobtitle= $row['name'];
+                $category=$row['category'];
+                $minexp=$row['minexp'];
+                $salary=$row['salary'];
+                $desc=$row['desc'];
+                $role=$row['role'];
+                $ename =$row['ename'];
+                $status=$row['status'];
+          ?>
+          <div class="col-md-10" style="margin: 20px; background: rgba(0,0,0,0.5);padding: 5px;box-shadow: 0px 0px 5px #003333">
+            <a href="post-details.php?post_id=<?php echo $pid; ?>"><h3 style="color: #2196F3"><?php echo $jobtitle;?></h3></a>
+            <h5>By <?php echo $ename;?></h5>
+            <div class="rating" style="color: #f91818;">
+                <?php 
+                $eid = $row['eid'];
+                $etotal_rating = 0;
+                $et_r_g_person = 0;
+                $eratingSQL = "SELECT * FROM `employer_rating` WHERE eid = '$eid';";
+                $eratingsresult = $conn->query($eratingSQL);
+                foreach ($eratingsresult as $err ) {
+                  $etotal_rating = $etotal_rating + $err['rating'];
+                  $et_r_g_person ++;
+                }
+                $eaverage_rating = $etotal_rating / $et_r_g_person;
+                for ($i=1; $i <= $eaverage_rating ; $i++) { 
+              ?>
+              <i class="fa fa-star"></i> 
+              <?php } ?>
+			  <h5>Rating Out of 5 </h5>
+            </div>
+            
+            <h4>Job Description:
+            <h5><?php echo $desc;?></h5></h4>
+            <h5>Experiance required: <?php echo $minexp;?>  </h5>
+            <h5>Salary:<?php echo $salary;?> </h5>
+            <a href="applyJob.php?id=<?php echo $pid;?>" class="pull-right" ><h3>Apply</h3></a>
+          </div>                      
+          <?php }
+          }else{
+             echo "No results found";
+          } ?>
+        </div>                          
+      </div>
 
                   <!--      ------------------------------------------------------------------------------------->
                   <!--     Error message  -->
